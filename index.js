@@ -4,7 +4,7 @@ const io = require('socket.io')(3300),
 	increments = require('increments'),
 	spawn = require('child_process').spawn;
 
-	increments.setup({ db: 'mysql://canadian_elect:pz9EaSPa21n2@localhost/canadian_election_2019' });	
+	increments.setup({ db: 'mysql://canadian_elect:wek1wplxi8av@vote.canadianelections.janglehost.com/canadian_election_2019' });	
 
 var	usersOnline = 0,
 	rb = false,
