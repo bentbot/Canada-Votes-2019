@@ -3,9 +3,9 @@
 
 `npm install`
 
-`node index.js` will build and host the project. 
+`npm s` will build and host the project. 
 
-The build will appear online at `http://localhost:8080/` and can be routed to a domain name with a server such as Nginx.
+The build will appear online at `http://localhost:8080/` and can be opened directly with a browser or routed to a domain with a webserver.
 
 ## Backend
 
