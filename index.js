@@ -4,7 +4,7 @@ const io = require('socket.io')(3300),
 	increments = require('increments'),
 	spawn = require('child_process').spawn;
 
-	increments.setup({ db: 'mysql://canadian_elect:pz9EaSPa21n2@localhost/canadian_election_2019' });	
+
 
 var	usersOnline = 0,
 	rb = false,
@@ -13,6 +13,13 @@ var app = express();
 	app.use(express.static(__dirname + '/dist/assets'));
 	app.use('/', express.static(__dirname + '/dist'));
 
+increments.setup({ db: {
+		host: 		"canadianelections.janglehost.com",
+		port:  		3306,
+		user: 		"canadian_elect",
+		password: 	"wek1wplxi8av"
+	}
+});
 
 	/**
 	* Electorial Polls
@@ -20,17 +27,23 @@ var app = express();
 
 		let candidates = {
 			'federal': [
+				{name: 'New Democratic Party', color:'orange'},
+				{name: 'Liberal Party', color:'red'},
+				{name: 'Conservative Party', color:'blue'},
+				{name: 'Green Party', color:'green'},
+				{name: 'People\'s Party', color:'purple'},
+				{name: 'Bloc Québécois', color:'skyblue'}
+			],
+			'municipal': [
 				{name: 'Liam Hogan'},
 				{name: 'Liam Hogan'}
 			]
 		};
 
 
-	for (var key in candidates) {
-		for( var candidate in candidates[key] ) {
-			increments.poll('canadian_'+key+'_2019', candidate );
+		for (var key in candidates) {
+			increments.poll('canadian_'+key+'_2019', candidates[key] );
 		}
-	}
 
 
 	/**
@@ -98,6 +111,10 @@ var app = express();
 
 			});
 
+
+			socket.on('candidates', function() {
+				socket.emit('candidates', candidates);
+			});
 
 			socket.on('statistics', function( poll ) {
 				increments.statistics(poll, function(e, f) {

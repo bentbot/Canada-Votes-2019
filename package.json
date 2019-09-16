@@ -1,12 +1,12 @@
 {
-  "name": "legalize",
-  "version": "0.0.0",
+  "name": "canadian_elections_2019",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node index.js",
     "build": "ng build",
-    "test": "ng test",
+    "test": "node index.js",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

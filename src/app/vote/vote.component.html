@@ -1,18 +1,57 @@
-<h2>Place your vote:</h2>
+<p> Who would you vote for in these two Canadian elections? </p>
+
+<h2>Canadian Federal Election:</h2>
 
 <ul class="candidates">
-	<li class="candidate red" tabindex="1" (click)="ballot.candidate = 'Yes'" >Yes</li>
-	<li class="candidate blue" tabindex="2" (click)="ballot.candidate = 'No'" >No</li>
+	<li *ngFor="let candidate of federal_candidates; let i = index;" 
+		[attr.class]="(federal_ballot.candidate==candidate.id?'selected '+candidate.color:'')+' candidate'" [attr.tabindex]="i" 
+		(click)="select_vote(candidate, 1);", (keyup)="kb($event,candidate,1)" >
+			<div>{{ candidate.name }}</div>
+	</li>
 </ul>
 
 <form action="/vote" method="post">
-	<input class="vote" [(ngModel)]="ballot.candidate" id="vote" name="vote"/>
-	<input type="hidden" [(ngModel)]="ballot.instance" name="instance" /><br/>
-	<input class="button" (click)="vote()" type="submit" id="submit" value="Vote"/>
+	<input class="vote" type="hidden" [(ngModel)]="federal_ballot.candidate" id="vote" name="vote" /> 
+	<input class="signature" type="hidden" [(ngModel)]="federal_ballot.instance" name="instance" />
+	<br/>
+	<input 	(click)="vote(federal_ballot)" 
+			[attr.title]="federal_ballot?'Cast a ballot for the '+federal_ballot.name:''" 
+			[attr.class]="(federal_ballot.voted?'voted button ':'button')+federal_ballot.color" 
+			type="submit" id="submit" value="Cast Vote"/>
 </form>
 
-<ul class="statistics" *ngIf="statistics">
-	<li *ngFor="let candidate of statistics.candidates" [attr.class]="(candidate.id == 'yes') ? 'red' : 'blue'" [attr.id]="candidate.id" [style.width.%]="candidate.percentage" [attr.data-count]="candidate.count">
+
+<!-- 
+
+<h2>Local Municipal Election:</h2>
+
+<ul class="candidates">
+	<li *ngFor="let candidate of municipal_candidates; let i = index;" 
+		[attr.class]="(municipal_ballot.candidate==candidate.id?'selected '+candidate.color:'')+' candidate'" [attr.tabindex]="i" 
+		(click)="select_vote(candidate)", (keyup)="kb($event,candidate)" > 
+			<div>{{ candidate.name }}</div>
+	</li>
+</ul>
+
+<form action="/vote" method="post">
+	<input class="vote" type="hidden" [(ngModel)]="municipal_ballot.candidate" id="vote" name="vote" /> 
+	<input class="signature" type="hidden" [(ngModel)]="municipal_ballot.instance" name="instance" />
+	<br/>
+	<input 	(click)="vote(municipal_ballot)" 
+			[attr.title]="municipal_ballot?'Cast a ballot for '+municipal_ballot.name:''" 
+			[attr.class]="(municipal_ballot.voted?'voted button ':'button')+municipal_ballot.color" 
+			type="submit" id="submit" value="Cast Vote"/>
+</form> 
+
+-->
+
+
+<ul class="statistics" *ngIf="showStatistics">
+	<li *ngFor="let candidate of federal_statistics.candidates" 
+		[attr.id]="candidate.id" 
+		[attr.class]="candidate.color" 
+		[style.width.%]="candidate.percentage" 
+		[attr.data-count]="candidate.count">
 		<div class="name">{{ candidate.name }}</div>
 		<div class="count">{{ candidate.count }}</div>
 	</li>
