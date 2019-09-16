@@ -1,7 +1,13 @@
+## Demo
+A demo of this script is available running here: <a href="https://vote.canadianelections.janglehost.com/" target="_blank">Poll: Canadian Federal Elections 2019</a>. This script could be run on a standalone voting machine, a web server, or maybe even your application.
 
 ## Build
 
-Run `node index.js` to build and host the project. The build will appear online at `http://localhost:8080/` and can be routed to a domain name with a server such as Nginx.
+`npm install`
+
+`npm start` will build and host the project at `http://localhost:8080/`
+
+The build will appear at <a href="http://localhost:8080/">http://localhost:8080/</a> and can be opened directly with a browser or routed to a domain with a webserver.
 
 ## Backend
 
