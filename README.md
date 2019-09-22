@@ -1,7 +1,7 @@
 # Canadian Elections 2019 Poll
 
 ## Demo Vote
-A demo of this script is available running here: <a href="https://vote.canadianelections.janglehost.com/" target="_blank">Poll: Canadian Federal Elections 2019</a>. This script could be run on a standalone voting machine, a web server, or maybe even your application.
+A demo of this script is available running here: <a href="https://vote.canadianelections.janglehost.com/" target="_blank">Poll: Canadian Federal Elections 2019 (https://vote.canadianelections.janglehost.com)</a>. This script could be run on a standalone voting machine, a web server, or maybe even your application.
 
 ## Build
 
