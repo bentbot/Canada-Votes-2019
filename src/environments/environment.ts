@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  socket: 'http://localhost:3300'
+  socket: 'https://vote.canadianelections.janglehost.com:3300'
 };

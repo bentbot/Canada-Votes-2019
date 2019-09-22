@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  socket: 'http://192.168.0.100:3300'
+  socket: 'https://vote.canadianelections.janglehost.com:3300'
 };

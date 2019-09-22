@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Socket } from 'ng-socket-io';
 import { CookieService } from 'ng2-cookies';
-import { environment } from '../../environment';
 import { Candidate, Statistics } from './candidate';
 
 @Component({
@@ -14,15 +13,17 @@ import { Candidate, Statistics } from './candidate';
 
 export class VoteComponent implements OnInit {
 
+  @Input() show_statistics = false;
+
   constructor(private socket: Socket,
-  			  private cookie: CookieService) { 
+  			      private cookie: CookieService) { 
 	}
 
   // Global Vars
 	key: string;
-  show_statistics: boolean;
 	
-	voted: boolean;
+	loaded: boolean;
+  voted: string;
 
   // Ballots
 	federal_ballot =   new Ballot();
@@ -42,14 +43,14 @@ export class VoteComponent implements OnInit {
   // * Voting * //
   vote(ballot) {
   	if ( !this.voted ) {
-  		
       this.socket.emit("vote", ballot);
-      this.cookie.set('voted', ballot.candidate);
-      
-      ballot.voted = true;
-      this.voted = true;
-
-      this.get_statistics(true);
+      this.socket.fromEvent<any>("voted")
+       .subscribe((result) => {
+          this.cookie.set('voted', ballot.candidate);
+          ballot.voted = true;
+          this.voted = result;
+          this.get_statistics(true);
+      });
 
   	}
   }
@@ -72,7 +73,7 @@ export class VoteComponent implements OnInit {
       return this.socket
           .fromEvent<any>("candidates")
          .subscribe((result) => { 
-           console.log(result);
+           this.loaded = true;
            this.federal_candidates = result['federal'];
            this.municipal_candidates = result['municipal'];
          });
@@ -87,11 +88,11 @@ export class VoteComponent implements OnInit {
          this.federal_statistics = result;
        });
 
-    this.socket.emit("statistics", 'municipal');
-    this.socket.fromEvent<any>("statistics")
-       .subscribe((result) => {
-         this.municipal_statistics = result;
-       });
+    // this.socket.emit("statistics", 'municipal');
+    // this.socket.fromEvent<any>("statistics")
+    //    .subscribe((result) => {
+    //      this.municipal_statistics = result;
+    //    });
     
     this.show_statistics = s;
 
@@ -105,8 +106,8 @@ export class VoteComponent implements OnInit {
 
 	ngOnInit() {
     this.get_candidates();
-		this.voted = (this.cookie.get('voted') != '') ? true : false;
-		if (this.voted) this.get_statistics();
+		this.voted = (this.cookie.get('voted') != '') ?this.cookie.get('voted') : null;
+		if (window.location.hash == "#statistics" || this.voted) this.get_statistics(true);
 	}
 
 }
@@ -117,6 +118,8 @@ export class Ballot {
     public name?: string,
     public candidate?: string,
     public voted?: boolean,
-		public key?: string
+		public instance?: string,
+    public color?: string,
+    public key?: string
 	) { }
 }

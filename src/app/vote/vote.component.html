@@ -1,58 +1,70 @@
-<p> Who would you vote for in these two Canadian elections? </p>
+<section>
+	<div class="loading" *ngIf="!loaded">Connecting to server...</div>
+	<div *ngIf="loaded">
 
-<h2>Canadian Federal Election:</h2>
+		<div class="vote" *ngIf="!voted">
+			<p> Who would you vote for in these two Canadian elections? </p>
 
-<ul class="candidates">
-	<li *ngFor="let candidate of federal_candidates; let i = index;" 
-		[attr.class]="(federal_ballot.candidate==candidate.id?'selected '+candidate.color:'')+' candidate'" [attr.tabindex]="i" 
-		(click)="select_vote(candidate, 1);", (keyup)="kb($event,candidate,1)" >
-			<div>{{ candidate.name }}</div>
-	</li>
-</ul>
+			<h2>Canadian Federal Election:</h2>
 
-<form action="/vote" method="post">
-	<input class="vote" type="hidden" [(ngModel)]="federal_ballot.candidate" id="vote" name="vote" /> 
-	<input class="signature" type="hidden" [(ngModel)]="federal_ballot.instance" name="instance" />
-	<br/>
-	<input 	(click)="vote(federal_ballot)" 
-			[attr.title]="federal_ballot?'Cast a ballot for the '+federal_ballot.name:''" 
-			[attr.class]="(federal_ballot.voted?'voted button ':'button')+federal_ballot.color" 
-			type="submit" id="submit" value="Cast Vote"/>
-</form>
+			<ul class="candidates">
+				<li *ngFor="let candidate of federal_candidates; let i = index;" 
+					[attr.tabindex]="i" 
+					[attr.class]="(federal_ballot.candidate==candidate.id)?'selected candidate '+candidate.color:'candidate '+candidate.color" 
+					(click)="select_vote(candidate, 1);" (keyup)="kb($event,candidate,1)" >
+						<div>{{ candidate.name }}</div>
+				</li>
+			</ul>
 
+			<form action="/vote" method="post">
+				<input class="vote" type="hidden" [(ngModel)]="federal_ballot.candidate" id="vote" name="vote" /> 
+				<input class="signature" type="hidden" [(ngModel)]="federal_ballot.instance" name="instance" />
+				<br/>
+				<input 	(click)="vote(federal_ballot)" 
+						[attr.title]="federal_ballot?'Cast a ballot for the '+federal_ballot.name:''" 
+						[attr.class]="(federal_ballot.voted?'voted button ':'button ')+federal_ballot.color" 
+						type="submit" id="submit" value="Cast Vote"/>
+			</form>
+		</div>
 
-<!-- 
+		<div *ngIf="voted">
 
-<h2>Local Municipal Election:</h2>
+			<p> <b>Thank you.</b> You have voted in the: </p>
 
-<ul class="candidates">
-	<li *ngFor="let candidate of municipal_candidates; let i = index;" 
-		[attr.class]="(municipal_ballot.candidate==candidate.id?'selected '+candidate.color:'')+' candidate'" [attr.tabindex]="i" 
-		(click)="select_vote(candidate)", (keyup)="kb($event,candidate)" > 
-			<div>{{ candidate.name }}</div>
-	</li>
-</ul>
+			<h2>Canadian Federal Election Poll</h2>
 
-<form action="/vote" method="post">
-	<input class="vote" type="hidden" [(ngModel)]="municipal_ballot.candidate" id="vote" name="vote" /> 
-	<input class="signature" type="hidden" [(ngModel)]="municipal_ballot.instance" name="instance" />
-	<br/>
-	<input 	(click)="vote(municipal_ballot)" 
-			[attr.title]="municipal_ballot?'Cast a ballot for '+municipal_ballot.name:''" 
-			[attr.class]="(municipal_ballot.voted?'voted button ':'button')+municipal_ballot.color" 
-			type="submit" id="submit" value="Cast Vote"/>
-</form> 
+			<ul class="candidates">
+				<li *ngFor="let candidate of federal_candidates; let i = index;" 
+					[attr.class]="(voted==candidate.id)?'selected candidate '+candidate.color:'candidate '+candidate.color">
+						<div>{{ candidate.name }}</div>
+				</li>
+			</ul>
 
--->
+		</div>
 
 
-<ul class="statistics" *ngIf="showStatistics">
-	<li *ngFor="let candidate of federal_statistics.candidates" 
-		[attr.id]="candidate.id" 
-		[attr.class]="candidate.color" 
-		[style.width.%]="candidate.percentage" 
-		[attr.data-count]="candidate.count">
-		<div class="name">{{ candidate.name }}</div>
-		<div class="count">{{ candidate.count }}</div>
-	</li>
-</ul>
+		<ul class="statistics" *ngIf="voted && federal_statistics || show_statistics && federal_statistics">
+			<li *ngFor="let candidate of federal_statistics.candidates" 
+				[attr.id]="candidate.id" 
+				[attr.class]="candidate.color" 
+				[style.width.%]="candidate.percentage" 
+				[attr.data-count]="candidate.count">
+				<div class="name">{{ candidate.name }}</div>
+				<div class="count">{{ candidate.count }}</div>
+			</li>
+		</ul>
+
+	</div>
+</section>
+
+<div class="bottom">
+	<a href="#statistics" class="button" (click)="get_statistics(true);">
+		<span>Statistics</span>
+	</a>
+	<a href="https://github.com/bentbot/Canada-Votes-2019" target="_blank" class="button">
+		<span>Source</span>
+	</a>
+	<a href="http://vote.canadianelections.janglehost.com:60000/statistics" target="_blank" class="button">
+		<span>API</span>
+	</a>
+</div>

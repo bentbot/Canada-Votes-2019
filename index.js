@@ -1,15 +1,16 @@
-const io = require('socket.io')(3300),
-	fs = require('fs'),
+const fs = require('fs'),
+	https = require('https'),
+	ca = fs.readFileSync(__dirname + '/src/assets/certs/bundle.ca'),
+	server = https.createServer({
+		key: fs.readFileSync(__dirname + '/src/assets/certs/priv.key'),
+		cert: fs.readFileSync(__dirname + '/src/assets/certs/certificate.crt')
+	});
+	io = require('socket.io').listen(server),
 	express = require('express'),
 	increments = require('increments'),
-	spawn = require('child_process').spawn;
-
-<<<<<<< HEAD
-
-=======
-	increments.setup({ db: 'mysql://canadian_elect:wek1wplxi8av@vote.canadianelections.janglehost.com/canadian_election_2019' });	
->>>>>>> 257a8d46c196a6df3362d21192096353872c956c
-
+	spawn = require('child_process').spawn,
+	args = require('minimist')(process.argv.slice(2));
+	server.listen(3300);
 var	usersOnline = 0,
 	rb = false,
 	ips = new Array();
@@ -17,13 +18,7 @@ var app = express();
 	app.use(express.static(__dirname + '/dist/assets'));
 	app.use('/', express.static(__dirname + '/dist'));
 
-increments.setup({ db: {
-		host: 		"canadianelections.janglehost.com",
-		port:  		3306,
-		user: 		"canadian_elect",
-		password: 	"wek1wplxi8av"
-	}
-});
+increments.setup("mysql://canadian_elect:wek1wplxi8av@127.0.0.1/canadian_election_2019");
 
 	/**
 	* Electorial Polls
@@ -31,58 +26,38 @@ increments.setup({ db: {
 
 		let candidates = {
 			'federal': [
-				{name: 'New Democratic Party', color:'orange'},
-				{name: 'Liberal Party', color:'red'},
-				{name: 'Conservative Party', color:'blue'},
-				{name: 'Green Party', color:'green'},
-				{name: 'People\'s Party', color:'purple'},
-				{name: 'Bloc Québécois', color:'skyblue'}
-			],
-			'municipal': [
-				{name: 'Liam Hogan'},
-				{name: 'Liam Hogan'}
+				{id: 'ndp', name: 'New Democratic Party', color:'orange'},
+				{id: 'liberal', name: 'Liberal Party', color:'red'},
+				{id: 'conservative', name: 'Conservative Party', color:'blue'},
+				{id: 'green', name: 'Green Party', color:'green'},
+				{id: 'peoples', name: "People's Party", color:'purple'},
+				{id: 'bloc', name: 'Bloc Québécois', color:'skyblue'}
 			]
 		};
 
-
-		for (var key in candidates) {
-			increments.poll('canadian_'+key+'_2019', candidates[key] );
-		}
+		increments.poll('canadian_election_2019', candidates['federal'] );
 
 
 	/**
 	* The Increments Web Application
 	**/
 
-		app.listen(8080, function() {
+		app.listen(60000, function() {
 				build();
-		        console.log('Listening on 8080');
+		        console.log('Listening on 60000');
 		});
 
 		app.get('/', function(req, res) {
 			res.send('<a href="/" style="font-family: sans-serif;">Loading...</a>');
 		});
 
-		/** API **/
-
-		app.get('/api', function(req, res) {
-			res.send('<a href="/" style="font-family: sans-serif;">Loading...</a>');
+		app.get('/candidates', function(req, res) {
+			res.send({'candidates': candidates['federal']});
 		});
 
-		app.get('/api/candidates', function(req, res) {
-			res.send({'candidates': candidates});
-		});
-
-		app.get('/api/candidates/:id', function(req, res) {
-			res.send({'candidates': candidates[req.params.id]});
-		});
-
-		app.get('/api/statistics', function(req, res) {
-			res.send('/api/statistics/:poll Example: <a href="/api/statistics/canadian_federal_2019">/api/statistics/canadian_federal_2019</a>');
-		});
-
-		app.get('/api/statistics/:id', function(req, res) {
-			increments.statistics(req.params.id, function(l, e) {
+		app.get('/statistics', function(req, res) {
+			increments.statistics('canadian_election_2019', function(l, e) {
+				// console.log(e);
 				res.send(e);
 			});
 		});
@@ -91,7 +66,6 @@ increments.setup({ db: {
 			console.log('Loading...');
 			build();
 		});
-
 
 
 	/**
@@ -104,13 +78,23 @@ increments.setup({ db: {
 			console.log(socket.request.connection.remoteAddress + ' connected. '+usersOnline+' users online.');
 
 			socket.on('vote', function (ballot) {
-				
+
 				var ip = socket.request.connection.remoteAddress;
-				console.log(ip + ' voted ' + ballot.candidate + ' in ' + ballot.poll);
-				
+
 				if ( ips.indexOf(ip) == -1 ) {
-					increments.vote({ poll: ballot.poll, name: ballot.candidate, data: ip });
+
+					increments.vote({ poll: 'canadian_election_2019', name: ballot.name, data: ip });
+
 					ips.push(ip);
+
+					socket.emit('voted', ballot.candidate);
+
+					increments.statistics('canadian_election_2019', function(e, f) {
+						io.socket.emit('statistics', f);
+					});
+
+					console.log(ip + ' voted ' + ballot.candidate + ' in ' + ballot.poll);
+
 				}
 
 			});
@@ -120,8 +104,9 @@ increments.setup({ db: {
 				socket.emit('candidates', candidates);
 			});
 
-			socket.on('statistics', function( poll ) {
-				increments.statistics(poll, function(e, f) {
+			socket.on('statistics', function() {
+				increments.statistics('canadian_election_2019', function(e, f) {
+					// console.log(e);
 					socket.emit('statistics', f);
 				});
 			});
@@ -137,31 +122,39 @@ increments.setup({ db: {
 	function build(a) {
 		if (rb) return;
 
-		rb = true; var ng;
+		if ( args.render ) {
 
-		if (!/^win/.test(process.platform)) { // linux
-		    ng = spawn('ng', ['b'], {
-		        // stdio: [null, process.stdout, process.stderr]
-		    });
-		} else { // windows
-		    ng = spawn('cmd', ['/s', '/c', 'ng', 'b'], {
-		        // stdio: [null, process.stdout, process.stderr]
-		    });
+			rb = true; var ng;
+
+			if ( args.prod ) {
+				var arg1 = ['b', '--prod'];
+				var arg2 = ['/s', '/c', 'ng', 'b', '--prod'];
+			} else {
+				var arg1 = ['b'];
+				var arg2 = ['/s', '/c', 'ng', 'b'];
+			}
+
+			if (!/^win/.test(process.platform)) { // linux
+			    ng = spawn('ng', arg1);
+			} else { // windows
+			    ng = spawn('cmd', arg2);
+			}
+
+			ng.on('data', (data) => {
+			    console.log(`stdout: ${data}`);
+			});
+
+			ng.on('data', (data) => {
+			    console.log( `ng b: ${data}` );
+			});
+
+			ng.on('error', function(e) {
+				console.log(e);
+			})
+
+			ng.on('close', (code) => {
+				rb = false;
+			});
+
 		}
-
-		ng.stdout.on('data', (data) => {
-		    console.log(`stdout: ${data}`);
-		});
-
-		ng.stderr.on('data', (data) => {
-		    console.log( `ng b: ${data}` );
-		});
-
-		ng.on('error', function(e) {
-			console.log(e);
-		})
-
-		ng.on('close', (code) => {
-			rb = false;
-		});
 	}

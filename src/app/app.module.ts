@@ -7,9 +7,13 @@ import { AppComponent } from './app.component';
 import { VoteComponent } from './vote/vote.component';
 
 import { SocketIoModule, SocketIoConfig, Socket} from 'ng-socket-io';
-import { environment } from '../environment';
+import { environment } from '../environments/environment';
 
-const config: SocketIoConfig = { url: environment.socket };
+const config: SocketIoConfig = { url: environment.socket, options: { 
+    rejectUnauthorized: false, 
+    secure: true 
+  } 
+};
 
 @NgModule({
   declarations: [
@@ -22,7 +26,6 @@ const config: SocketIoConfig = { url: environment.socket };
     HttpModule,
     SocketIoModule.forRoot(config) 
   ],
-  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
