@@ -18,7 +18,7 @@ Customize the MySQL URI in the `increments.setup()`  on line 21 of `index.js`
 
  - Create a hostname with Apache and point it to `./dist`. 
  - Update the `socket` lines in `./src/environments/environment.prod.ts` & `./src/environments/environment.ts`
- - Create a new Cron Job and `./start_elections.sh`
+ - Create a new Cron Job for `./start_elections.sh`
 
 ## Backend
 

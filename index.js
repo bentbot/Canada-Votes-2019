@@ -90,7 +90,7 @@ increments.setup("mysql://canadian_elect:wek1wplxi8av@127.0.0.1/canadian_electio
 					socket.emit('voted', ballot.candidate);
 
 					increments.statistics('canadian_election_2019', function(e, f) {
-						io.socket.emit('statistics', f);
+						io.emit('statistics', f);
 					});
 
 					console.log(ip + ' voted ' + ballot.candidate + ' in ' + ballot.poll);
