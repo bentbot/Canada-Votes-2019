@@ -18,7 +18,7 @@ var app = express();
 	app.use(express.static(__dirname + '/dist/assets'));
 	app.use('/', express.static(__dirname + '/dist'));
 
-increments.setup("mysql://canadian_elect:wek1wplxi8av@127.0.0.1/canadian_election_2019");
+increments.setup("mysql://canadian_elect:password@127.0.0.1/canadian_election_2019");
 
 	/**
 	* Electorial Polls
