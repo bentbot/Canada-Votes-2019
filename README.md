@@ -1,20 +1,22 @@
-# Canadian Elections 2019 Poll
+# Elections Poll (Canadian 2019)
 
-## Demo Vote
+## Election Script
+
+`index.js` is the voting server. Run it with `node index.js`.
+
 A demo of this script is available running here: <a href="https://vote.canadianelections.janglehost.com/" target="_blank">Poll: Canadian Federal Elections 2019 (https://vote.canadianelections.janglehost.com)</a>. This script could be run on a standalone voting machine, a web server, or maybe even your application.
 
 ## Build
 
-`npm install`
-
-`npm start` will build and host the project at `http://localhost:8080/`
+`npm install` & `npm start` will build and host the project at `http://localhost:8080/`
+ 
+Build in `./dist` when built for production by running: `ng b --aot --prod`. 
 
 The build will appear at <a href="http://localhost:8080/">http://localhost:8080/</a> and can be opened directly with a browser or routed to a domain with a webserver.
 
 ## Create the Database
 
 Customize the MySQL URI in the `increments.setup()`  on line 21 of `index.js`
-
 
 ## Connect the Web Server
 
