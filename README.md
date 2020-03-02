@@ -1,5 +1,7 @@
 # Elections Poll (Canadian 2019)
 
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll.png)
+
 ## Election Script
 
 `index.js` is the voting server. Run it with `node index.js`.
@@ -24,6 +26,8 @@ Customize the MySQL URI in the `increments.setup()`  on line 21 of `index.js`
  - Update the `socket` lines in `./src/environments/environment.prod.ts` & `./src/environments/environment.ts`
  - Create a new Cron Job for `./start_elections.sh`
 
-## Backend
+## Back-end
 
 Usiually Angular 2 routes requests to a PHP or Ruby backend using HTTP requests. This project forgoes the need of a seperate program and instead creates a small Express server. Spawning a client `ng build` process to render the application and using Socket.IO to communicate with Angular in the browser makes for a stellar team of serve and delivery.
+
+![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll_results.png)
