@@ -6,7 +6,7 @@
 
 `index.js` is the voting server. Run it with `node index.js`.
 
-A demo of this script is available running here: <a href="http://vote.canadianelections.janglehost.com/" target="_blank">Poll: Canadian Federal Elections 2019 (http://vote.canadianelections.janglehost.com)</a>. This script could be run on a standalone voting machine, a web server, or maybe even your application.
+A demo of this script is available running here: <a href="http://canadianelections.janglehost.com/" target="_blank">Poll: Canadian Federal Elections (2019) (http://canadianelections.janglehost.com)</a>. This script could be run on a standalone voting machine, a web server, or maybe even your application.
 
 ## Build
 
