@@ -37,8 +37,7 @@
 
 	/* Connect to a MYSQL database:  */
 
-	increments.setup("mysql://canadian_liam:EuropeanStarling@canadianelections.janglehost.com/canadian_demo");
-	// increments.setup("mysql://canadian_elect:password@127.0.0.1/canadian_election_2019");
+	increments.setup("mysql://canadian_demo:DemoPassword@canadianelections.janglehost.com/canadian_demo");
 
 
 
