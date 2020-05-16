@@ -52,7 +52,7 @@
 	</div>
 </section>
 
-<div class="bottom">
+<div [attr.class]="(statistics&&allow_statistics)?'bottom a':'bottom'">
 	<a *ngIf="allow_statistics && show_buttons" href="#statistics" class="button" (click)="get_statistics();show_buttons=false;">
 		<span>Statistics</span>
 	</a>

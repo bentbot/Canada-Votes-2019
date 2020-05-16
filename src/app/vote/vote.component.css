@@ -1,4 +1,5 @@
 p {
+	padding: 10px;
 	font-size: 22px;
 	font-family: 'Helvetica';
 }
@@ -26,6 +27,7 @@ p {
 	width: 125px;
 	height: 125px;
 	color: white;
+	z-index: 10;
 	font-family: 'Helvetica';;
 	font-size: 21px;
 	text-align: center;
@@ -121,6 +123,8 @@ input {
 }
 
 .button {
+	position: relative;
+	z-index: 10;
 	font-size: 22px;
 	padding: 12px 35px 9px;
 	cursor: pointer;
@@ -159,12 +163,13 @@ h1 {
 }
 
 ul.statistics {
+    left: -2%;
+    margin: 0;
 	padding: 0;
-	margin: 0;
-	position: fixed;
-	bottom: 40px;
-	width: 100%;
-	background: #f3f3f3;
+    width: 104%;
+    bottom: -5px;
+    position: fixed;
+    background: #f3f3f3;
 }
 
 ul.statistics li {
@@ -200,6 +205,9 @@ ul.statistics li div {
 	right: 10px;
 }
 
+.bottom.a {
+	bottom: 110px;
+}
 .bottom a {
 	margin-right: 10px;
 	border: none;

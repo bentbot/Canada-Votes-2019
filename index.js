@@ -62,13 +62,13 @@
 
 
 	increments.poll( poll, candidates, function (err, model, candidates) {
-		console.log(model);
-	}, this.Debug);
+		if(Debug)console.log(model);
+	}, Debug);
 
 
 /* 0.*/
 /* Program definitions */
-console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end Angular errors in your app.\nDisable debug mode using the setting in `index.js`.')
+
   const fs = require('fs'),
 	https = require('https'),
 	io = require('socket.io')((SecureSocket)?false:WebSocketPort),
@@ -94,7 +94,7 @@ console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end 
 
 	/* Web Application */
 	app.listen(WebPort, function() {
-		console.log('Listening at http://localhost:'+WebPort);
+		console.log('Listening at: http://localhost:'+WebPort);
 	});
 
 	app.get('/', function(req, res) {
@@ -116,7 +116,7 @@ console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end 
 	/* Client Connection */
 	io.on('connection', function( socket ) {
 
-		if (this.Debug) console.log(socket.request.connection.remoteAddress + ' connected.');
+		if(Debug)console.log(socket.request.connection.remoteAddress + ' connected.');
 
 		// Send the client the voting prompt & list of candidates.
 		socket.on('candidates', function() {
@@ -138,7 +138,7 @@ console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end 
 
 				socket.emit('voted', ballot.candidate);
 
-				if (this.Debug) console.log(ip + ' voted.');
+				if(Debug)console.log(ip + ' voted.');
 
 				increments.statistics(poll, function(e, stats) {
 					io.emit('statistics', stats); // Send statistics to the user.
@@ -187,13 +187,13 @@ console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end 
 		if ( args.render ) {
 			build_running = true; var ng;
 			if ( args.prod ) {
-				console.log('Building Angular (production).');
+				if(Debug)console.log('Building Angular (production).');
 				var arg1 = ['b', '--prod'];
 				var arg2 = ['/s', '/c', 'ng', 'b', '--prod'];
 			} else {
 				var arg1 = ['b'];
 				var arg2 = ['/s', '/c', 'ng', 'b'];
-				console.log('Building Angular.');
+				if(Debug)console.log('Building Angular.');
 			}
 			if (!/^win/.test(process.platform)) {// inux
 				ng = spawn('ng', arg1);
@@ -201,10 +201,10 @@ console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end 
 				ng = spawn('cmd', arg2);
 			}
 			ng.on('data', (data) => {
-				console.log( `ng b: ${data}` );
+				if(Debug)console.log( `ng b: ${data}` );
 			});
 			ng.on('error', function(e) {
-				console.log(e);
+				if(Debug)console.log(e);
 			});
 			ng.on('close', (code) => {
 				rb = false;
@@ -215,16 +215,16 @@ console.log('=== Debug Mode ===\nRun `ng b` to see more details about front-end 
 			* For development purposes, run `ng b` to build Angular.
 			**/
 			ng = spawn('ng', ['b']);
-			console.log('Commencing Angular build process...');
+			if(Debug)console.log('Commencing Angular build process...');
 			build_running = true;
 			ng.on('data', (data) => {
-				console.log( `ng b: ${data}` );
+				if(Debug)console.log( `ng b: ${data}` );
 			});
 			ng.on('error', function(e) {
-				console.log(e);
+				if(Debug)console.log(e);
 			});
 			ng.on('close', (code) => {
-				console.log('A new build has completed.');
+				if(Debug)console.log('A new build has completed.');
 				build_running = false;
 			});
 		}
