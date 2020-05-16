@@ -3,7 +3,12 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
+/**
+ * Front-end Variables
+ * Mode: local development
+**/
 export const environment = {
   production: false,
-  socket: 'https://vote.canadianelections.janglehost.com:3300'
+  socket: 'http://localhost:3300',
+  secure_socket: false
 };

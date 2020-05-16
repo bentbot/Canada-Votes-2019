@@ -12,8 +12,6 @@ p {
 	margin: 20px 0;
 }
 
-
-
 .candidates {
 	list-style: none;
 	padding: 0;
@@ -61,10 +59,6 @@ p {
 	border-color: white;
 }
 
-.candidate:last-child {
-	margin: 0 !important;
-}
-
 .red { background: #F44336; border-color: #F44336; color: white; }
 .blue { background: #1565C0; border-color: #1565C0; color: white; }
 .orange { background: #ff9800; border-color: #ff9800; color: white; }
@@ -77,42 +71,53 @@ h1.red, h2.red, h3.red {
 	background: transparent;     
 	margin: 5px 0;
 }
+
 h1.blue, h2.blue, h3.blue { 
 	color: #1565C0; 
 	background: transparent;     
 	margin: 5px 0;
 }
+
 h1.orange, h2.orange, h3.orange { 
 	color: #ff9800; 
 	background: transparent;     
 	margin: 5px 0;
 }
+
 h1.green, h2.green, h3.green { 
 	color: #4caf50; 
 	background: transparent;     
 	margin: 5px 0;
 }
+
 h1.purple, h2.purple, h3.purple { 
 	color: rgb(94, 0 , 154); 
 	background: transparent;     
 	margin: 5px 0;
 }
+
 h1.skyblue, h2.skyblue, h3.skyblue { 
 	color: #4fc3f7; 
 	background: transparent;     
 	margin: 5px 0;
 }
+
 h2.projectedVotes {
 	margin: 0;
 }
+
+h2.projectedWinner {
+	margin-top: 35px;
+}
+
 form {
 	text-align: center;
 }
+
 input {
 	text-align: center;
 	font-size: 21px;
 }
-
 
 .button {
 	font-size: 22px;
@@ -141,6 +146,7 @@ input {
 	background: white;
 	border-color: #ffd300;
 }
+
 section {
 	height: 50vh;
     margin: 20vh 0;
@@ -159,6 +165,7 @@ ul.statistics {
 	width: 100%;
 	background: #f3f3f3;
 }
+
 ul.statistics li {
 	display: inline-block;
 	font-family: 'Helvetica';;
@@ -170,9 +177,11 @@ ul.statistics li {
 	height: 40px;
 	transition: all 0.2s linear;
 }
+
 ul.statistics li div {
 	font-size: 20px;
 }
+
 .error {
 	background: #f9ff56;
 	width: 50%;
@@ -182,7 +191,6 @@ ul.statistics li div {
 	border-radius: 0px;
 	font-family: 'Helvetica';;
 }
-
 
 .bottom {
 	position: fixed;
@@ -199,6 +207,9 @@ ul.statistics li div {
 	font-weight: bold;
 	text-decoration: none;
 }
+
 .bottom a:hover {
 	text-decoration: underline;
 }
+
+/* L. Hogan aka. @bentbot - 2020 */

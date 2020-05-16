@@ -5,14 +5,15 @@ import { HttpModule } from '@angular/http';
 import { CookieService } from 'ng2-cookies';
 import { AppComponent } from './app.component';
 import { VoteComponent } from './vote/vote.component';
-
 import { SocketIoModule, SocketIoConfig, Socket} from 'ng-socket-io';
 import { environment } from '../environments/environment';
 
-const config: SocketIoConfig = { url: environment.socket, options: { 
-    rejectUnauthorized: false, 
-    secure: true 
-  } 
+const config: SocketIoConfig = { 
+    url: environment.socket, 
+    options: { 
+      rejectUnauthorized: false, 
+      secure: environment.secure_socket
+    }
 };
 
 @NgModule({
