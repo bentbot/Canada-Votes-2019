@@ -1,4 +1,4 @@
-# Elections Poll (Canadian 2019)
+# Elections Poll
 
 ![N|Solid](https://raw.githubusercontent.com/bentbot/increments/master/screenshots/canadian_poll.png)
 
