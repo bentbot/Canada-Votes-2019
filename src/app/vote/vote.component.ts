@@ -43,6 +43,17 @@ export class VoteComponent implements OnInit {
 	}
 
 	/** 
+	 * Nonce Key
+	**/
+	nonce() {
+		this.socket.emit("nonce", 1);
+		this.socket.fromEvent<any>("nonce")
+			.subscribe((result) => {
+				this.ballot.key = result;
+			});
+	}
+
+	/** 
 	 * Vote ( selecting an option ) 
 	**/
 	select_vote(candidate) {
@@ -151,11 +162,14 @@ export class VoteComponent implements OnInit {
 	 * Vote Again
 	**/
 	voting_screen() {
-		this.voted = null;
-		this.statistics = null;
-		this.show_buttons = true;
-		this.ballot = new Ballot();
-		window.scrollTo(0,0);
+		if ( this.allow_revote ) {
+			this.nonce();
+			this.voted = null;
+			window.scrollTo(0,0);
+			this.statistics = null;
+			this.show_buttons = true;
+			this.ballot = new Ballot();
+		}
 	}
 
 	/** 
@@ -164,11 +178,13 @@ export class VoteComponent implements OnInit {
 	ngOnInit() {
 
 		this.voted = null;
+		this.nonce();
 
 		/** 
 		 * Get the list of Candidates from the Node.js socket server.
 		**/
 		this.get_candidates();
+
 		/**
 		 * 
 		 * Install & run `index.js` with:

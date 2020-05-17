@@ -130,14 +130,14 @@
 
 		// Accept and process a vote.
 		socket.on('vote', function (ballot) {
-
+			if(!ballot || !ballot.key) return;
 			var ip = socket.request.connection.remoteAddress;
 
 			// Disallow voting if the IP address has already voted.
 			if ( ips.indexOf(ip) == -1 || IPAddressProtection == false ) {
 
 				// Add the vote to the database.
-				increments.vote({ 'poll': poll, 'name': ballot.name, 'data': ip });
+				increments.vote({ 'poll': poll, 'name': ballot.name, 'data': ip, 'instance': ballot.key });
 
 				ips.push(ip); // Add the IP address to a list of used addresses.
 
@@ -157,6 +157,16 @@
 			increments.statistics(poll, function(e, stats) {
 				socket.emit('statistics', stats);
 			});
+		});
+
+		// Send the client a nonce key.
+		socket.on('nonce', function() {
+			var ip = socket.request.connection.remoteAddress;
+			if ( ips.indexOf(ip) == -1 || AllowRevoting == true ) {
+				increments.getInstance(function (instance) {
+					socket.emit('nonce', instance);
+				});
+			}
 		});
 
 	});

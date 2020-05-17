@@ -208,6 +208,17 @@ var VoteComponent = (function () {
         this.ballot = new __WEBPACK_IMPORTED_MODULE_4__models__["a" /* Ballot */]();
     }
     /**
+     * Nonce Key
+    **/
+    VoteComponent.prototype.nonce = function () {
+        var _this = this;
+        this.socket.emit("nonce", 1);
+        this.socket.fromEvent("nonce")
+            .subscribe(function (result) {
+            _this.ballot.key = result;
+        });
+    };
+    /**
      * Vote ( selecting an option )
     **/
     VoteComponent.prototype.select_vote = function (candidate) {
@@ -316,17 +327,21 @@ var VoteComponent = (function () {
      * Vote Again
     **/
     VoteComponent.prototype.voting_screen = function () {
-        this.voted = null;
-        this.statistics = null;
-        this.show_buttons = true;
-        this.ballot = new __WEBPACK_IMPORTED_MODULE_4__models__["a" /* Ballot */]();
-        window.scrollTo(0, 0);
+        if (this.allow_revote) {
+            this.nonce();
+            this.voted = null;
+            window.scrollTo(0, 0);
+            this.statistics = null;
+            this.show_buttons = true;
+            this.ballot = new __WEBPACK_IMPORTED_MODULE_4__models__["a" /* Ballot */]();
+        }
     };
     /**
      * AngularInit
     **/
     VoteComponent.prototype.ngOnInit = function () {
         this.voted = null;
+        this.nonce();
         /**
          * Get the list of Candidates from the Node.js socket server.
         **/
