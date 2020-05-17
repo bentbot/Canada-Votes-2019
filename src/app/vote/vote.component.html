@@ -59,17 +59,17 @@
 
 <div class="footer">
 	<div [attr.class]="(statistics&&allow_statistics)?'bottom a':'bottom'">
+		<a *ngIf="view_source" href="https://github.com/bentbot/Canada-Votes-2019" title="GitHub" aria-label="This application available for free on GitHub." class="button">
+			<span>Source</span>
+		</a>
 		<a *ngIf="!show_buttons && allow_revote" href="#vote" class="button" title="Re-Vote" aria-label="Go to the voting screen." (click)="voting_screen();">
 			<span>Voting Screen</span>
-		</a>
-		<a *ngIf="allow_statistics && show_buttons" href="#statistics" title="View Poll Statistics" aria-label="Go to this poll's statistics." class="button" (click)="show_statistics();">
-			<span>Statistics</span>
 		</a>
 		<a *ngIf="allow_revote && voted && show_buttons" href="#vote" title="Re-Vote" aria-label="Vote in this poll again." class="button" (click)="voting_screen();">
 			<span>Vote Again</span>
 		</a>
-		<a *ngIf="view_source" href="https://github.com/bentbot/Canada-Votes-2019" title="GitHub" aria-label="This application available for free on GitHub." class="button">
-			<span>Source</span>
+		<a *ngIf="allow_statistics && show_buttons" href="#statistics" title="View Poll Statistics" aria-label="Go to this poll's statistics." class="button" (click)="show_statistics();">
+			<span>Statistics</span>
 		</a>
 		<a *ngIf="export_data" href="/statistics" title="Export JSON Data" aria-label="Export statistics." class="button">
 			<span>JSON</span>
