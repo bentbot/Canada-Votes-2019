@@ -20,7 +20,7 @@
 
 	/* Name the poll: */
 
-	const poll = 'canadian_election_2019';
+	const poll = 'canadian_election_2020';
 	const title = 'Federal Election';
 	const prompt = 'Who would you vote for in the Canadian federal elections?';
 
@@ -32,12 +32,17 @@
 		{id: 'bloc', name: 'Bloc Québécois', color:'skyblue'},
 		{id: 'liberal', name: 'Liberal Party', color:'red'},
 		{id: 'conservative', name: 'Conservative Party', color:'blue'},
-		{id: 'peoples_party', name: 'Peoples Party', color:'purple'}
+		{id: 'peoples_party', name: "People's Party", color:'purple'}
 	];
 
 	/* Connect to a MYSQL database:  */
 
-	increments.setup("mysql://canadian_demo:DemoPassword@canadianelections.janglehost.com/canadian_demo");
+	increments.setup({
+		db:"mysql://canadian_demo:DemoPassword@canadianelections.janglehost.com/canadian_demo",
+		roundMode: 'hundredth', // These are different rounding modes: float/floor/round/pure/tenth/hundredth/auto
+		instance:false,
+		cookies: false
+	});
 
 
 
@@ -98,7 +103,7 @@
 	});
 
 	app.get('/', function(req, res) {
-		res.send('<meta http-equiv="refresh" content="3; url=/"><p style="font-family: sans-serif;">Application loading...  [ <a href="/">Retry</a> ]</p>');
+		res.send('<meta http-equiv="refresh" content="3; url=/"><p style="font-family: sans-serif;">Application Loading... <br/> <br/> [ <a href="/">Reload</a> ]</p>');
 	});
 
 	app.get('/candidates', function(req, res) {
@@ -137,7 +142,7 @@
 				ips.push(ip); // Add the IP address to a list of used addresses.
 
 				socket.emit('voted', ballot.candidate);
-
+				socket.emit('reload',1);
 				if(Debug)console.log(ip + ' voted.');
 
 				increments.statistics(poll, function(e, stats) {
@@ -153,6 +158,7 @@
 				socket.emit('statistics', stats);
 			});
 		});
+
 	});
 
 	function get_candidates(ip) {
@@ -175,15 +181,14 @@
 /* 3.*/
 
 	/* Angular build & watch program. */
-	fs.watch(__dirname+'/src', { recursive: true }, function(eventType, filename) {
-		build();
-	});
 
-	// Run the build
-	if ( RunBuild ) build();
-
-	function build(a) {
+	function build(Watch=0,Turned=false) {
 		if (build_running) return;
+		if (Watch){
+			fs.watch(__dirname+'/src', { recursive: true }, function(eventType, filename) {
+				build(Watch,true);
+			});
+		}
 		if ( args.render ) {
 			build_running = true; var ng;
 			if ( args.prod ) {
@@ -215,8 +220,9 @@
 			* For development purposes, run `ng b` to build Angular.
 			**/
 			ng = spawn('ng', ['b']);
-			if(Debug)console.log('Commencing Angular build process...');
 			build_running = true;
+			if(Watch&&Turned)console.log('Rebuilding...');
+			if(Debug)console.log('Commencing Angular build process...');
 			ng.on('data', (data) => {
 				if(Debug)console.log( `ng b: ${data}` );
 			});
@@ -224,10 +230,15 @@
 				if(Debug)console.log(e);
 			});
 			ng.on('close', (code) => {
-				if(Debug)console.log('A new build has completed.');
+				if(Debug||!Debug)console.log(Date.now(),'A new build has been compiled.');
 				build_running = false;
+				io.emit('reload',1);
 			});
 		}
 	}
+
+
+	// Run the build
+	if ( RunBuild ) build(true);
 
 

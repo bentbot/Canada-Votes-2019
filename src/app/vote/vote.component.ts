@@ -14,7 +14,7 @@ import { Candidate, Statistics, Ballot } from './models';
 
 export class VoteComponent implements OnInit {
 
-	debug = false;
+	debug = 1;
 
 	@Input() candidates: Candidate;
 	@Input() statistics: Statistics;
@@ -39,6 +39,7 @@ export class VoteComponent implements OnInit {
 				private title: Title,
 				private cookie: CookieService) 
 	{ 
+		
 	}
 
 	/** 
@@ -53,7 +54,7 @@ export class VoteComponent implements OnInit {
 	 * Voting ( processing a vote ) 
 	**/
 	vote(ballot) {
-		if ( !this.voted ) {
+		if ( !this.voted && ballot.candidate ) {
 			this.socket.emit("vote", ballot);
 			this.socket.fromEvent<any>("voted")
 				.subscribe((result) => {
@@ -82,7 +83,7 @@ export class VoteComponent implements OnInit {
 				this.voted 				= result.voted;
 				
 				// Application Options
-				this.debug 				= result.debug;
+				this.debug 				= (!this.debug)?result.debug:this.debug;
 				this.allow_statistics 	= result.show_statistics;
 				this.view_source		= result.source_available;
 				this.export_data		= result.export_available;
@@ -95,7 +96,6 @@ export class VoteComponent implements OnInit {
 				if(this.cookie_protection) this.get_voted_cookie();
 				if (this.allow_statistics && window.location.hash == "#statistics") {
 					this.show_buttons = false;
-					this.get_statistics();
 				} else { 
 					this.show_buttons = true; 
 				}
@@ -118,6 +118,12 @@ export class VoteComponent implements OnInit {
 				if(this.debug) console.log(result);
 			});
 		}
+	}
+
+	show_statistics() {
+		this.get_statistics();
+		this.show_buttons=false;
+		window.scrollTo(0,0);
 	}
 
 	/** 
@@ -149,6 +155,7 @@ export class VoteComponent implements OnInit {
 		this.statistics = null;
 		this.show_buttons = true;
 		this.ballot = new Ballot();
+		window.scrollTo(0,0);
 	}
 
 	/** 
@@ -162,7 +169,6 @@ export class VoteComponent implements OnInit {
 		 * Get the list of Candidates from the Node.js socket server.
 		**/
 		this.get_candidates();
-
 		/**
 		 * 
 		 * Install & run `index.js` with:
@@ -172,6 +178,9 @@ export class VoteComponent implements OnInit {
 		 * $ nodemon <proj. dir>/index.js
 		 * 
 		**/
+
+		// Comment this out to disable automatic reloading (useful in dev.)
+		this.socket.fromEvent<any>("reload").subscribe(()=>{location.reload});
 
 	}
 }

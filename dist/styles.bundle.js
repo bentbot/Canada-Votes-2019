@@ -472,7 +472,7 @@ module.exports = function (css) {
 /***/ "./node_modules/raw-loader/index.js!./node_modules/@angular/cli/node_modules/postcss-loader/lib/index.js??embedded!./src/styles.css":
 /***/ (function(module, exports) {
 
-module.exports = "/* You can add global styles to this file, and also import other style files */\nbody {\n\tbackground: #f3f3f3;\n\tmargin: 15px 0 0 0;\n\tpadding: 0;\n\ttext-align: center;\n}\na, h1, h2, h3, h4 {\n\ttext-align: center;\n\tfont-family: sans-serif;\n}\n"
+module.exports = "html, body,app-root,vote {\n  height: 100%;\n  margin: 0;\n}\n/* You can add global styles to this file, and also import other style files */\nbody {\n\tbackground: #f3f3f3;\n\ttext-align: center;\n}\na, h1, h2, h3, h4 {\n\ttext-align: center;\n\tfont-family: sans-serif;\n}\n.footer,.push {\n  height: 40px;\n}"
 
 /***/ }),
 

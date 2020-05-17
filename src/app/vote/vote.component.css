@@ -1,7 +1,14 @@
+section {
+	min-height: 100%;
+    margin: 0 0 -40px;
+}
+
 p {
 	padding: 10px;
 	font-size: 22px;
 	font-family: 'Helvetica';
+	margin-top: 0;
+	padding-top: 40px;
 }
 
 .loading {
@@ -62,6 +69,10 @@ p {
 	border-color: white;
 }
 
+.results {
+	min-height: 360px;
+}
+
 .red { background: #F44336; border-color: #F44336; color: white; }
 .blue { background: #1565C0; border-color: #1565C0; color: white; }
 .orange { background: #ff9800; border-color: #ff9800; color: white; }
@@ -110,7 +121,8 @@ h2.projectedVotes {
 }
 
 h2.projectedWinner {
-	margin-top: 35px;
+	margin-top: 0px;
+	padding-top: 35px;
 }
 
 form {
@@ -152,10 +164,6 @@ input {
 	border-color: #ffd300;
 }
 
-section {
-	height: 50vh;
-    margin: 20vh 0;
-}
 
 h1 {
 	margin-top: 100px;
@@ -163,10 +171,11 @@ h1 {
 }
 
 ul.statistics {
-    left: -2%;
     margin: 0;
 	padding: 0;
-    width: 104%;
+    left: 0%;
+    z-index: 2;
+    width: 100%;
     bottom: -5px;
     position: fixed;
     background: #f3f3f3;
@@ -199,10 +208,12 @@ ul.statistics li div {
 }
 
 .bottom {
-	position: fixed;
-	bottom: 10px;
-	left: 10px;
-	right: 10px;
+	position: relative;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	z-index: 1;
+	padding: 10px;
 }
 
 .bottom.a {
@@ -215,10 +226,19 @@ ul.statistics li div {
 	background:  transparent;
 	font-weight: bold;
 	text-decoration: none;
+	padding: 0% 3% 0% 3%; 
 }
 
 .bottom a:hover {
 	text-decoration: underline;
 }
 
-/* L. Hogan aka. @bentbot - 2020 */
+
+@media screen and (max-height: 600px) {
+	.vote {
+		margin-bottom: 70px;
+	}
+}
+    
+
+/* Copyright Liam Hogan - Published as bentbot in 2020 */
